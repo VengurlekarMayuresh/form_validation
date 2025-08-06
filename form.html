@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form with Validation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .input-error {
+            border-color: #e74c3c !important;
+        }
+
+        .input-valid {
+            border-color: #27ae60 !important;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .requirements {
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Registration Form</h2>
+        
+        <div id="alert" class="alert"></div>
+        
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Enter first name">
+                <div class="error" id="firstNameError"></div>
+                <div class="requirements">Must contain only alphabets, minimum 6 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Enter last name">
+                <div class="error" id="lastNameError"></div>
+                <div class="requirements">Cannot be empty</div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter email (e.g., user@example.com)">
+                <div class="error" id="emailError"></div>
+                <div class="requirements">Must follow format: name@domain.com</div>
+            </div>
+
+            <div class="form-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" placeholder="Enter 10-digit mobile number">
+                <div class="error" id="mobileError"></div>
+                <div class="requirements">Must contain exactly 10 digits</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password">
+                <div class="error" id="passwordError"></div>
+                <div class="requirements">Minimum 6 characters required</div>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea id="address" name="address" placeholder="Enter your address"></textarea>
+                <div class="error" id="addressError"></div>
+                <div class="requirements">Cannot be empty</div>
+            </div>
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <script>
+        // Validation functions
+        function validateFirstName(firstName) {
+            const nameRegex = /^[A-Za-z]+$/;
+            if (!firstName || firstName.trim() === '') {
+                return 'First name is required';
+            }
+            if (!nameRegex.test(firstName)) {
+                return 'First name should contain only alphabets';
+            }
+            if (firstName.length < 6) {
+                return 'First name should be at least 6 characters long';
+            }
+            return '';
+        }
+
+        function validateLastName(lastName) {
+            if (!lastName || lastName.trim() === '') {
+                return 'Last name is required';
+            }
+            return '';
+        }
+
+        function validateEmail(email) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!email || email.trim() === '') {
+                return 'Email is required';
+            }
+            if (!emailRegex.test(email)) {
+                return 'Please enter a valid email address (e.g., name@domain.com)';
+            }
+            return '';
+        }
+
+        function validateMobile(mobile) {
+            const mobileRegex = /^\d{10}$/;
+            if (!mobile || mobile.trim() === '') {
+                return 'Mobile number is required';
+            }
+            if (!mobileRegex.test(mobile)) {
+                return 'Mobile number should contain exactly 10 digits';
+            }
+            return '';
+        }
+
+        function validatePassword(password) {
+            if (!password || password.trim() === '') {
+                return 'Password is required';
+            }
+            if (password.length < 6) {
+                return 'Password should be at least 6 characters long';
+            }
+            return '';
+        }
+
+        function validateAddress(address) {
+            if (!address || address.trim() === '') {
+                return 'Address is required';
+            }
+            return '';
+        }
+
+        // Display error message
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            const inputElement = document.getElementById(fieldId);
+            
+            if (message) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+                inputElement.classList.add('input-error');
+                inputElement.classList.remove('input-valid');
+            } else {
+                errorElement.style.display = 'none';
+                inputElement.classList.remove('input-error');
+                inputElement.classList.add('input-valid');
+            }
+        }
+
+        // Show alert message
+        function showAlert(message, type) {
+            const alertElement = document.getElementById('alert');
+            alertElement.textContent = message;
+            alertElement.className = `alert alert-${type}`;
+            alertElement.style.display = 'block';
+            
+            // Hide alert after 5 seconds
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Real-time validation
+        document.getElementById('firstName').addEventListener('blur', function() {
+            const error = validateFirstName(this.value);
+            showError('firstName', error);
+        });
+
+        document.getElementById('lastName').addEventListener('blur', function() {
+            const error = validateLastName(this.value);
+            showError('lastName', error);
+        });
+
+        document.getElementById('email').addEventListener('blur', function() {
+            const error = validateEmail(this.value);
+            showError('email', error);
+        });
+
+        document.getElementById('mobile').addEventListener('blur', function() {
+            const error = validateMobile(this.value);
+            showError('mobile', error);
+        });
+
+        document.getElementById('password').addEventListener('blur', function() {
+            const error = validatePassword(this.value);
+            showError('password', error);
+        });
+
+        document.getElementById('address').addEventListener('blur', function() {
+            const error = validateAddress(this.value);
+            showError('address', error);
+        });
+
+        // Form submission validation
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent form submission
+            
+            // Get form values
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const mobile = document.getElementById('mobile').value;
+            const password = document.getElementById('password').value;
+            const address = document.getElementById('address').value;
+
+            // Validate all fields
+            const firstNameError = validateFirstName(firstName);
+            const lastNameError = validateLastName(lastName);
+            const emailError = validateEmail(email);
+            const mobileError = validateMobile(mobile);
+            const passwordError = validatePassword(password);
+            const addressError = validateAddress(address);
+
+            // Show all errors
+            showError('firstName', firstNameError);
+            showError('lastName', lastNameError);
+            showError('email', emailError);
+            showError('mobile', mobileError);
+            showError('password', passwordError);
+            showError('address', addressError);
+
+            // Check if there are any errors
+            const hasErrors = firstNameError || lastNameError || emailError || 
+                            mobileError || passwordError || addressError;
+
+            if (hasErrors) {
+                // Scenario: Invalid email and short password (as requested)
+                let errorMessage = 'Please fix the following errors before submitting:';
+                const errors = [];
+                
+                if (firstNameError) errors.push('First Name: ' + firstNameError);
+                if (lastNameError) errors.push('Last Name: ' + lastNameError);
+                if (emailError) errors.push('Email: ' + emailError);
+                if (mobileError) errors.push('Mobile: ' + mobileError);
+                if (passwordError) errors.push('Password: ' + passwordError);
+                if (addressError) errors.push('Address: ' + addressError);
+                
+                showAlert('Form submission failed. Please correct the highlighted errors.', 'error');
+                
+                // Also show individual alerts for invalid email and short password as requested
+                if (emailError && passwordError) {
+                    setTimeout(() => {
+                        alert('Invalid email format and password too short detected!');
+                    }, 100);
+                } else if (emailError) {
+                    setTimeout(() => {
+                        alert('Invalid email format detected!');
+                    }, 100);
+                } else if (passwordError) {
+                    setTimeout(() => {
+                        alert('Password is too short!');
+                    }, 100);
+                }
+                
+            } else {
+                // All validations passed
+                showAlert('Registration successful! All fields are valid.', 'success');
+                
+                // Here you would normally submit the form to the server
+                console.log('Form data:', {
+                    firstName,
+                    lastName,
+                    email,
+                    mobile,
+                    password,
+                    address
+                });
+                
+                // Reset form after successful submission
+                setTimeout(() => {
+                    this.reset();
+                    // Remove validation classes
+                    const inputs = document.querySelectorAll('input, textarea');
+                    inputs.forEach(input => {
+                        input.classList.remove('input-valid', 'input-error');
+                    });
+                }, 2000);
+            }
+        });
+
+        // Only allow numbers in mobile field
+        document.getElementById('mobile').addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+        });
+    </script>
+</body>
+</html>
